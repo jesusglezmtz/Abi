@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Esto no es una estafa Abi</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700;800;900&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <style>
+        /* RESET + ESTILOS BASE */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Raleway', sans-serif;
+            background: #fceae5;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 16px 40px;
+            position: relative;
+        }
+
+        /* FONDO CON OLEAJE */
+        .wave-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: linear-gradient(145deg, #fce3db 0%, #f5d6cd 100%);
+        }
+
+        .wave-bg::after {
+            content: '';
+            position: absolute;
+            bottom: -10%;
+            left: -50%;
+            width: 200%;
+            height: 40%;
+            background: rgba(255, 215, 200, 0.3);
+            border-radius: 50% 50% 0 0;
+            animation: waveFloat 8s ease-in-out infinite alternate;
+        }
+
+        @keyframes waveFloat {
+            0% { transform: translateX(-10%) scale(1); opacity: 0.5; }
+            100% { transform: translateX(10%) scale(1.2); opacity: 0.9; }
+        }
+
+        /* ESTRELLITAS */
+        .star-particle {
+            position: fixed;
+            width: 6px;
+            height: 6px;
+            background: #ffb347;
+            border-radius: 50%;
+            box-shadow: 0 0 12px #ffb347;
+            z-index: -1;
+            animation: twinkle 2s infinite alternate;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.2; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1.3); }
+        }
+
+        /* CONTENEDOR PRINCIPAL (oculto hasta validar) */
+        .container {
+            max-width: 420px;
+            width: 100%;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+            display: none;
+        }
+
+        .container.visible {
+            display: block;
+            animation: fadeUp 0.8s ease-out;
+        }
+
+        @keyframes fadeUp {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* HERO */
+        .hero {
+            text-align: center;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-size: 4.2rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: #3d2b1f;
+            text-shadow: 6px 6px 0 rgba(255, 180, 160, 0.5);
+            line-height: 1;
+        }
+
+        .hero .sub {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.1rem;
+            color: #7a4e3a;
+            background: rgba(255, 235, 225, 0.7);
+            backdrop-filter: blur(4px);
+            display: inline-block;
+            padding: 6px 20px;
+            border-radius: 40px;
+            margin-top: 4px;
+            font-weight: 600;
+            border: 1px solid #dbb8ab;
+        }
+
+        /* TYPING */
+        .typing-container {
+            background: rgba(255, 245, 240, 0.6);
+            backdrop-filter: blur(6px);
+            padding: 16px 20px;
+            border-radius: 60px;
+            margin: 16px 0 24px;
+            border: 1px solid #eccfc4;
+            box-shadow: 0 8px 20px rgba(100, 60, 40, 0.08);
+            text-align: center;
+        }
+
+        #typed-text {
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #3d2b1f;
+            min-height: 3.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        #typed-text .cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1.4rem;
+            background: #c76b4a;
+            animation: blink 0.8s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* GRID DE TARJETAS */
+        .grid-vibes {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin: 10px 0 30px;
+        }
+
+        .card {
+            background: rgba(255, 248, 245, 0.75);
+            backdrop-filter: blur(8px);
+            border-radius: 30px;
+            padding: 18px 22px;
+            border: 1px solid #f0d6cc;
+            box-shadow: 0 10px 25px rgba(140, 80, 60, 0.10);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: all 0.2s ease;
+            animation: cardBounce 0.8s ease backwards;
+            transform-origin: center;
+        }
+
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.25s; }
+        .card:nth-child(3) { animation-delay: 0.4s; }
+        .card:nth-child(4) { animation-delay: 0.55s; }
+        .card:nth-child(5) { animation-delay: 0.7s; }
+
+        @keyframes cardBounce {
+            0% { opacity: 0; transform: translateY(40px) scale(0.94); }
+            60% { transform: translateY(-6px) scale(1.01); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .card .emoji-big {
+            font-size: 2.8rem;
+            min-width: 54px;
+            text-align: center;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.05));
+        }
+
+        .card .info {
+            flex: 1;
+            justify-content: center;
+    display: flex;
+    flex-direction: column;
+        }
+
+        .card .info h3 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #3d2419;
+            letter-spacing: -0.3px;
+        }
+
+        .card .info p {
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 400;
+            font-size: 0.9rem;
+            color: #6b4c3b;
+            margin-top: 2px;
+            line-height: 1.3;
+        }
+
+        .card .tag {
+            background: #dbb8ab;
+            color: #2f1d14;
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 4px 12px;
+            border-radius: 40px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* TARJETA ESPECIAL: SPOTIFY */
+        .card-spotify {
+            background: rgba(30, 215, 96, 0.12);
+            border: 2px solid #1DB954;
+            padding: 14px 18px;
+        }
+
+        .card-spotify .info h3 {
+            color: #1DB954;
+        }
+
+        .spotify-embed {
+            margin: 8px 0 4px;
+            border-radius: 16px;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .spotify-embed iframe {
+            width: 100%;
+            border: none;
+            border-radius: 16px;
+        }
+
+        .btn-spotify {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #1DB954;
+            color: #fff;
+            padding: 8px 18px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+            margin: 6px auto;
+        }
+
+        .btn-spotify:active {
+            transform: scale(0.95);
+        }
+
+        /* BOTÓN PRINCIPAL */
+        .btn-primary {
+            display: block;
+            width: 100%;
+            background: #1f110b;
+            color: #fae9e2;
+            border: none;
+            padding: 18px 10px;
+            border-radius: 60px;
+            font-family: 'Raleway', sans-serif;
+            font-weight: 900;
+            font-size: 1.6rem;
+            letter-spacing: 1px;
+            text-align: center;
+            text-decoration: none;
+            box-shadow: 0 12px 0 #8b5e4a, 0 8px 25px rgba(0,0,0,0.2);
+            transition: all 0.06s linear;
+            margin: 16px 0 10px;
+            border: 2px solid #f0cec0;
+            transform: translateY(-4px);
+            cursor: pointer;
+        }
+
+        .btn-primary:active {
+            transform: translateY(6px);
+            box-shadow: 0 4px 0 #6b4534;
+        }
+
+        .footer-note {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 0.7rem;
+            color: #9a7a6a;
+            margin-top: 24px;
+            text-align: center;
+            letter-spacing: 1px;
+            opacity: 0.7;
+        }
+
+        .footer-note span {
+            display: inline-block;
+            animation: pulseLove 1.6s infinite;
+        }
+
+        @keyframes pulseLove {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); color: #c0392b; }
+        }
+
+        /* ===== MODAL DE CONTRASEÑA ===== */
+        .password-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(30, 18, 12, 0.6);
+            backdrop-filter: blur(16px);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .password-overlay.hidden {
+            display: none;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        .password-modal {
+            background: rgba(255, 245, 240, 0.92);
+            backdrop-filter: blur(20px);
+            border-radius: 48px;
+            padding: 40px 28px 36px;
+            max-width: 400px;
+            width: 100%;
+            border: 2px solid #f0d6cc;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+            animation: modalPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            text-align: center;
+        }
+
+        @keyframes modalPop {
+            0% { opacity: 0; transform: scale(0.8) translateY(20px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .password-modal .lock-icon {
+            font-size: 4rem;
+            margin-bottom: 8px;
+            display: block;
+            filter: drop-shadow(0 8px 12px rgba(0,0,0,0.1));
+        }
+
+        .password-modal h2 {
+            font-family: 'Raleway', sans-serif;
+            font-weight: 900;
+            font-size: 1.8rem;
+            color: #3d2b1f;
+            margin-bottom: 6px;
+        }
+
+        .password-modal .hint {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 0.95rem;
+            color: #6b4c3b;
+            margin-bottom: 24px;
+            line-height: 1.5;
+            background: rgba(219, 184, 171, 0.2);
+            padding: 12px 16px;
+            border-radius: 20px;
+            border-left: 4px solid #dbb8ab;
+        }
+
+        .password-modal .hint strong {
+            color: #3d2419;
+        }
+
+        .password-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-top: 6px;
+        }
+
+        .password-input-group input {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid #eccfc4;
+            border-radius: 60px;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1rem;
+            background: rgba(255, 248, 245, 0.8);
+            color: #3d2b1f;
+            outline: none;
+            transition: all 0.3s ease;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        .password-input-group input:focus {
+            border-color: #c76b4a;
+            box-shadow: 0 0 0 4px rgba(199, 107, 74, 0.15);
+            background: #fff;
+        }
+
+        .password-input-group input::placeholder {
+            color: #b09484;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+        }
+
+        .password-input-group .btn-unlock {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 60px;
+            background: #1f110b;
+            color: #fae9e2;
+            font-family: 'Raleway', sans-serif;
+            font-weight: 900;
+            font-size: 1.3rem;
+            letter-spacing: 2px;
+            box-shadow: 0 8px 0 #8b5e4a;
+            transition: all 0.06s linear;
+            cursor: pointer;
+            transform: translateY(-3px);
+        }
+
+        .password-input-group .btn-unlock:active {
+            transform: translateY(5px);
+            box-shadow: 0 3px 0 #6b4534;
+        }
+
+        .password-modal .error-msg {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 0.85rem;
+            color: #c0392b;
+            margin-top: 14px;
+            min-height: 1.5rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .password-modal .error-msg.show {
+            opacity: 1;
+        }
+
+        /* Personalización SweetAlert2 para que combine con el estilo */
+        .custom-swal {
+            font-family: 'Raleway', sans-serif !important;
+            border-radius: 30px !important;
+            backdrop-filter: blur(20px) !important;
+            background: rgba(255, 245, 240, 0.95) !important;
+            border: 2px solid #f0d6cc !important;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.2) !important;
+        }
+
+        .custom-swal .swal2-title {
+            font-family: 'Raleway', sans-serif !important;
+            font-weight: 900 !important;
+            color: #3d2b1f !important;
+        }
+
+        .custom-swal .swal2-html-container {
+            font-family: 'Quicksand', sans-serif !important;
+            color: #6b4c3b !important;
+        }
+
+        .custom-swal .swal2-confirm {
+            background: #1f110b !important;
+            color: #fae9e2 !important;
+            font-family: 'Raleway', sans-serif !important;
+            font-weight: 800 !important;
+            border-radius: 60px !important;
+            padding: 12px 40px !important;
+            box-shadow: 0 6px 0 #8b5e4a !important;
+            transition: all 0.06s linear !important;
+            border: 2px solid #f0cec0 !important;
+            transform: translateY(-3px) !important;
+        }
+
+        .custom-swal .swal2-confirm:active {
+            transform: translateY(3px) !important;
+            box-shadow: 0 2px 0 #6b4534 !important;
+        }
+
+        .custom-swal .swal2-icon {
+            border-color: #ffb347 !important;
+            color: #ffb347 !important;
+        }
+
+        /* Ajustes iPhone safe areas */
+        @supports (padding: max(0px)) {
+            body {
+                padding-left: max(16px, env(safe-area-inset-left));
+                padding-right: max(16px, env(safe-area-inset-right));
+                padding-bottom: max(40px, env(safe-area-inset-bottom));
+            }
+        }
+
+        @media (min-width: 600px) {
+            body { padding: 40px 30px; }
+            .container { max-width: 460px; }
+            .hero h1 { font-size: 5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Fondo -->
+<div class="wave-bg"></div>
+
+<!-- ===== MODAL DE CONTRASEÑA ===== -->
+<div class="password-overlay" id="passwordOverlay">
+    <div class="password-modal">
+        <span class="lock-icon">🔐</span>
+        <h2>Acceso VIP</h2>
+        <div class="hint">
+            💭 <strong>Equipo al que ya le vas...</strong><br>
+            pista: Equipo Mexicano
+        </div>
+        <div class="password-input-group">
+            <input 
+                type="password" 
+                id="passwordInput" 
+                placeholder="Escribe la contraseña..."
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="off"
+                spellcheck="false"
+            >
+            <button class="btn-unlock" id="unlockBtn">✦ ABRIR ✦</button>
+        </div>
+        <div class="error-msg" id="errorMsg">❌ Intenta de nuevo, como que Chivas o América u.u</div>
+    </div>
+</div>
+
+<!-- ===== CONTENIDO PRINCIPAL ===== -->
+<div class="container" id="mainContent">
+
+    <div class="hero">
+        <h1>ABI</h1>
+        <div class="sub">♐ · Sagitario · 28 de noviembre</div>
+    </div>
+
+    <div class="typing-container">
+        <div id="typed-text">
+            <span id="message"></span><span class="cursor"></span>
+        </div>
+    </div>
+
+    <div class="grid-vibes">
+        <div class="card">
+            <div class="emoji-big">☕</div>
+            <div class="info">
+                <h3>Italian Coffee · Starbucks</h3>
+                <p>Tus favoritos</p>
+            </div>
+            <span class="tag">☕ favorito</span>
+        </div>
+
+        <div class="card">
+            <div class="emoji-big">👠</div>
+            <div class="info">
+                <h3>Sex and the City</h3>
+                <p>Manhattan · Cosmopolitan</p>
+            </div>
+            <span class="tag">📺 GOAT</span>
+        </div>
+
+        <div class="card">
+            <div class="emoji-big">XOXO</div>
+            <div class="info">
+                <h3>Gossip Girl</h3>
+                <p>Serena · Upper East Side</p>
+            </div>
+            <span class="tag">🦢 chic</span>
+        </div>
+
+        <div class="card">
+            <div class="emoji-big">❤️‍🩹</div>
+            <div class="info">
+                <h3>This Is Us</h3>
+                <p>Pearson · momentos · familia</p>
+            </div>
+            <span class="tag">🥺 emocional</span>
+        </div>
+
+        <div class="card">
+            <div class="emoji-big">🎃</div>
+            <div class="info">
+                <h3>El Extraño Mundo de Jack</h3>
+                <p>Sally · niños del truco o trato · Tim Burton</p>
+            </div>
+            <span class="tag">🖤 oscuro</span>
+        </div>
+        <div class="card">
+            <div class="emoji-big">⚽</div>
+            <div class="info">
+                <h3>La más FIFAS durante el mundial</h3>
+                <p>Una vez Pumista, es para toda la vida (aunque pierdan 🥺) <br>PD. Sé que eres más de Béisbol</p>
+            </div>
+            <span class="tag">⚽ Deporte</span>
+        </div>
+
+        <!-- TARJETA ESPECIAL: CANCIÓN DE CUMPLEAÑOS -->
+        <div class="card card-spotify">
+            <div class="info">
+                <h3>🎵 Canción favorita</h3>
+                <p style="font-size:0.8rem; color:#1DB954; font-weight:600;">Feid · X19X</p>
+                <div class="spotify-embed">
+                    <iframe src="https://open.spotify.com/embed/track/51CGbL9BAw1896waeHoR9w?utm_source=generator&theme=0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                </div>
+                <a href="https://open.spotify.com/intl-es/track/51CGbL9BAw1896waeHoR9w?si=496de63898284951" target="_blank" class="btn-spotify">
+                    ▶ Abrir en Spotify
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <button class="btn-primary" id="surpriseBtn">✨ ABRIR ✨</button>
+
+    <div class="footer-note">
+        <span>🖤</span> hecho para Abi · con café y series <span>🖤</span>
+    </div>
+</div>
+
+<script>
+    (function() {
+        // ===== VALIDACIÓN DE CONTRASEÑA =====
+        const overlay = document.getElementById('passwordOverlay');
+        const mainContent = document.getElementById('mainContent');
+        const passwordInput = document.getElementById('passwordInput');
+        const unlockBtn = document.getElementById('unlockBtn');
+        const errorMsg = document.getElementById('errorMsg');
+
+        const CORRECT_PASSWORD = 'pumas';
+
+        function validatePassword() {
+            const input = passwordInput.value.trim();
+            if (input.toLowerCase() === CORRECT_PASSWORD) {
+                errorMsg.classList.remove('show');
+                overlay.classList.add('hidden');
+                mainContent.classList.add('visible');
+                setTimeout(initTyping, 400);
+                return true;
+            } else {
+                errorMsg.classList.add('show');
+                passwordInput.value = '';
+                passwordInput.focus();
+                const modal = document.querySelector('.password-modal');
+                modal.style.animation = 'none';
+                setTimeout(() => {
+                    modal.style.animation = 'modalPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                }, 10);
+                return false;
+            }
+        }
+
+        unlockBtn.addEventListener('click', validatePassword);
+        passwordInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                validatePassword();
+            }
+        });
+
+        setTimeout(() => {
+            passwordInput.focus();
+        }, 500);
+
+        // ===== TYPING =====
+        const messages = [
+            "Mejórate pronto",
+            "Ríete cuando veas esto",
+            "Eres la mejor",
+            "♐ Sagitaria · soñadora",
+            "☕ Frappé de Italian Coffee",
+            "XOXO · Gossip Girl",
+            "❤️ This Is Us · feelings",
+            "🎃 Sally · El extraño mundo de Jack",
+            "📈 Lic. en Gestión de Proyectos",
+            "✨ Abi · Rels B style",
+            "🎂 28 de noviembre · tu día ❤️"
+        ];
+
+        let msgIndex = 0;
+        const messageSpan = document.getElementById('message');
+        let typingInitialized = false;
+
+        function typeMessage(text, callback) {
+            let i = 0;
+            messageSpan.textContent = '';
+            const interval = setInterval(() => {
+                if (i < text.length) {
+                    messageSpan.textContent += text.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(interval);
+                    if (callback) callback();
+                }
+            }, 70);
+        }
+
+        function rotateMessage() {
+            const msg = messages[msgIndex % messages.length];
+            typeMessage(msg, () => {
+                setTimeout(() => {
+                    let len = messageSpan.textContent.length;
+                    const eraseInterval = setInterval(() => {
+                        if (len > 0) {
+                            messageSpan.textContent = messageSpan.textContent.slice(0, -1);
+                            len--;
+                        } else {
+                            clearInterval(eraseInterval);
+                            msgIndex++;
+                            setTimeout(rotateMessage, 400);
+                        }
+                    }, 45);
+                }, 2500);
+            });
+        }
+
+        function initTyping() {
+            if (typingInitialized) return;
+            typingInitialized = true;
+            setTimeout(rotateMessage, 300);
+        }
+
+        // ===== ESTRELLAS =====
+        function createStars() {
+            const count = 18;
+            for (let i = 0; i < count; i++) {
+                const star = document.createElement('div');
+                star.className = 'star-particle';
+                const size = 4 + Math.random() * 8;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                star.style.animationDuration = 2 + Math.random() * 3 + 's';
+                star.style.background = `hsl(${30 + Math.random() * 20}, 90%, 60%)`;
+                document.body.appendChild(star);
+            }
+        }
+        createStars();
+
+        // ===== BOTÓN SORPRESA CON SWEETALERT2 =====
+        document.getElementById('surpriseBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Efecto de presión en el botón
+            this.style.transform = 'translateY(6px)';
+            this.style.boxShadow = '0 4px 0 #6b4534';
+            setTimeout(() => {
+                this.style.transform = 'translateY(-4px)';
+                this.style.boxShadow = '0 12px 0 #8b5e4a, 0 8px 25px rgba(0,0,0,0.2)';
+            }, 120);
+
+            // Emojis personalizados
+            const emojis = ['☕', '👠', 'XOXO', '❤️', '🎃', '♐', '✨', '🏴‍☠️', '🎂', '🐾', '🌟', '💫'];
+            const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+            
+            // Mensajes personalizados
+            const messages = [
+                `Eres única ❤️`,
+                `Tu vibra siempre transmite tranquilidad`,
+                `Sigue brillando, Sagitaria ✨`,
+            ];
+            const randomMsg = messages[Math.floor(Math.random() * messages.length)];
+
+            // SweetAlert2 con estilo personalizado
+            Swal.fire({
+                title: '✨ ¡ABI! ✨',
+                html: `
+                    <div style="font-size: 4rem; margin-bottom: 10px;">🌟</div>
+                    <p style="font-size: 1.2rem; font-weight: 600; color: #3d2b1f;">
+                        ${randomMsg}
+                    </p>
+                    <p style="font-size: 0.95rem; color: #6b4c3b; margin-top: 8px;">
+                        "Sigue brillando, Sagitaria."<br>
+                        <span style="font-size: 0.8rem; opacity: 0.7;">— Rels B vibe</span>
+                    </p>
+                    <div style="margin-top: 12px; font-size: 0.8rem; color: #9a7a6a;">
+                        🖤 hecho con café y series 🖤
+                    </div>
+                `,
+                icon: 'success',
+                confirmButtonText: '💫 Eres la mejor 💫',
+                customClass: {
+                    popup: 'custom-swal',
+                    confirmButton: 'custom-swal-confirm'
+                },
+                backdrop: 'rgba(30, 18, 12, 0.5)',
+                width: 420,
+                padding: '2rem',
+                showClass: {
+                    popup: 'animate__animated animate__fadeInUp'
+                },
+                hideClass: {
+                    popup: 'animate__animated animate__fadeOutDown'
+                }
+            });
+        });
+
+        // ===== DETECTAR IPHONE =====
+        if (/iPhone/i.test(navigator.userAgent)) {
+            document.body.classList.add('iphone-device');
+        }
+
+    })();
+</script>
+
+</body>
+</html>
